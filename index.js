@@ -115,6 +115,40 @@ async function run() {
       res.send(result);
     })
 
+    // updated a my job
+    app.patch('/my-jobs/:id',async (req, res)=>{
+      const id=req.params.id;
+      console.log(id)
+      const filter={ _id : new ObjectId(id)}
+      const options={ upsert : true}
+      const updatedJob=req.body;
+      const job={
+        $set: {
+          job_picture: updatedJob.job_picture,
+          job_title: updatedJob.job_title,
+          job_category: updatedJob.job_category, 
+          salary_range: updatedJob.salary_range, 
+          job_desc: updatedJob.job_desc, 
+          job_Applicants: updatedJob.job_Applicants,
+          job_PostingDate: updatedJob.job_PostingDate,
+          application_Deadline: updatedJob.application_Deadline,
+        }
+      }
+      const result=await jobCollection.updateOne(filter,job,options);
+      res.send(result);
+    })
+
+
+    // delete job
+    app.delete('/jobs/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = {
+        _id: new ObjectId(id)
+      }
+      const result = await jobCollection.deleteOne(query);
+      res.send(result);
+    })
+
 
 
     // appied job section
