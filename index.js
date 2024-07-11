@@ -42,9 +42,7 @@ async function run() {
     })
 
     // some job
-    app.get('/jobs', async (req, res) => {
-      const category = req.query.job_category;
-      console.log(category)
+    app.get('/category-jobs', async (req, res) => {
       let query = {};
       if (req.query ?.job_category) {
         query = {
@@ -55,8 +53,22 @@ async function run() {
       res.send(result);
     })
 
+
+    // my job
+    app.get('/my-jobs', async (req, res) => {
+      let query = {};
+      if (req.query ?.user_email) {
+        query = {
+          user_email: req.query.user_email
+        }
+      }
+      const result = await jobCollection.find(query).toArray();
+      res.send(result);
+    })
+
+
     // search job
-    app.get('/jobSearch', async (req, res) => {
+    app.get('/search-jobs', async (req, res) => {
       const title = req.query.job_title;
       // regex
       const regex = new RegExp(title, 'i');
@@ -67,6 +79,7 @@ async function run() {
       res.send(result)
     })
 
+    
 
     // fetch single job
     app.get('/jobDetails/:id', async (req, res) => {
